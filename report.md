@@ -1,10 +1,17 @@
+I triggered an ICE while running `cargo doc`.
+
+I have pushed the reproduction repo to [cargo_1_69_0_doc_ice_repro](https://github.com/nathan-at-least/cargo_1_69_0_doc_ice_repro).
+
+I am using cargo stable:
+
+```
 $ cargo --version
 cargo 1.69.0 (6e9a83356 2023-04-12)
+```
 
-real    0m0.048s
-user    0m0.036s
-sys     0m0.012s
+Here's the crashing command output:
 
+```
 $ cargo doc
  Documenting rustix v0.36.9
 thread 'rustc' panicked at 'no resolutions for a doc link', compiler/rustc_metadata/src/rmeta/encoder.rs:2228:18
@@ -36,7 +43,7 @@ stack backtrace:
                                at /rustc/84c898d65adf2f39a5a98507f1fe0ce10a2b8dbc/library/std/src/panicking.rs:696:13
   13:     0x7c7d91197419 - std::panicking::begin_panic_handler::{{closure}}::h9e2b2176e00e0d9c
                                at /rustc/84c898d65adf2f39a5a98507f1fe0ce10a2b8dbc/library/std/src/panicking.rs:583:13
-   14:     0x7c7d91194786 - std::sys_common::backtrace::__rust_end_short_backtrace::h5739b8e512c09d02
+  14:     0x7c7d91194786 - std::sys_common::backtrace::__rust_end_short_backtrace::h5739b8e512c09d02
                                at /rustc/84c898d65adf2f39a5a98507f1fe0ce10a2b8dbc/library/std/src/sys_common/backtrace.rs:150:18
   15:     0x7c7d91197122 - rust_begin_unwind
                                at /rustc/84c898d65adf2f39a5a98507f1fe0ce10a2b8dbc/library/std/src/panicking.rs:579:5
@@ -94,5 +101,4 @@ error: could not document `rustix`
 
 Caused by:
   process didn't exit successfully: `rustdoc --edition=2018 --crate-type lib --crate-name rustix /home/user/.cargo/registry/src/github.com-1ecc6299db9ec823/rustix-0.36.9/src/lib.rs --cap-lints allow -o /home/user/hack/rust-doc-ice-2023-04-25/target/doc --cfg 'feature="default"' --cfg 'feature="io-lifetimes"' --cfg 'feature="libc"' --cfg 'feature="std"' --cfg 'feature="termios"' --cfg 'feature="use-libc-auxv"' --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --diagnostic-width=194 -C metadata=68c48281f8d51e01 -L dependency=/home/user/hack/rust-doc-ice-2023-04-25/target/debug/deps --extern bitflags=/home/user/hack/rust-doc-ice-2023-04-25/target/debug/deps/libbitflags-1a1c34f79f6e612c.rmeta --extern io_lifetimes=/home/user/hack/rust-doc-ice-2023-04-25/target/debug/deps/libio_lifetimes-cd6be4f8fe3b4bc6.rmeta --extern libc=/home/user/hack/rust-doc-ice-2023-04-25/target/debug/deps/liblibc-25f8caa1cd741fae.rmeta --extern linux_raw_sys=/home/user/hack/rust-doc-ice-2023-04-25/target/debug/deps/liblinux_raw_sys-a98848148f479f38.rmeta --crate-version 0.36.9 --cfg linux_raw` (exit status: 101)
-
-
+```
